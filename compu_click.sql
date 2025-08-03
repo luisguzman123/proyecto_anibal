@@ -2519,6 +2519,38 @@ ALTER TABLE `tarjetas`
 ALTER TABLE `tipo_cuenta`
   ADD CONSTRAINT `banco_tipo_cuenta_fk` FOREIGN KEY (`cod_banco`) REFERENCES `banco` (`cod_banco`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `proyectos`
+--
+CREATE TABLE `proyectos` (
+  `cod_proyecto` int(11) NOT NULL,
+  `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `descripcion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `precio` decimal(10,2) NOT NULL,
+  `cod_marca` int(11) NOT NULL,
+  `estado` varchar(20) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Índices de la tabla `proyectos`
+--
+ALTER TABLE `proyectos`
+  ADD PRIMARY KEY (`cod_proyecto`),
+  ADD KEY `proyectos_marca_fk` (`cod_marca`);
+
+--
+-- AUTO_INCREMENT de la tabla `proyectos`
+--
+ALTER TABLE `proyectos`
+  MODIFY `cod_proyecto` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Filtros para la tabla `proyectos`
+--
+ALTER TABLE `proyectos`
+  ADD CONSTRAINT `proyectos_marca_fk` FOREIGN KEY (`cod_marca`) REFERENCES `marcas` (`cod_marca`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 --
 -- Filtros para la tabla `usuario`
 --
