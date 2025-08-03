@@ -5,6 +5,18 @@ function mostrarListarOrdenCompra() {
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+function cargarListaProducto(componente) {
+    let datos = ejecutarAjax("controladores/proyecto.php", "leer=1");
+    let option = "<option value='0'>Selecciona un Producto</option>";
+    if (datos !== "0") {
+        let json_datos = JSON.parse(datos);
+        json_datos.map(function (item) {
+            option += `<option value='${item.cod_producto}'>${item.nombre}</option>`;
+        });
+    }
+    $(componente).html(option);
+}
+
 //------------------------------------------------------------------------------
 function mostrarAgregarOrdenCompra() {
     let contenido = dameContenido("paginas/movimientos/compra/orden_compra/agregar.php");
@@ -20,7 +32,7 @@ function mostrarAgregarOrdenCompra() {
 
 
     }
-    cargarListaInsumo("#insumo_lst");
+    cargarListaProducto("#producto_lst");
     cargarListaProveedorActivos("#proveedor_compra_lst");
     cargarListaPresupuestoPendientes("#presupuesto_compra_lst");
 
@@ -49,8 +61,8 @@ function cancelarOrdenCompra() {
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 function agregarTablaOrdenCompra() {
-    if ($("#insumo_lst").val() === "0") {
-        mensaje_dialogo_info_ERROR("Debes seleccionar un material", "ATENCION");
+    if ($("#producto_lst").val() === "0") {
+        mensaje_dialogo_info_ERROR("Debes seleccionar un producto", "ATENCION");
         return;
     }
 
@@ -65,15 +77,15 @@ function agregarTablaOrdenCompra() {
         mensaje_dialogo_info_ERROR("La cantidad debe ser mayor a cero", "ATENCION");
         return;
     }
-    if ($("#costo_txt").val().trim().length === 0) {
-        mensaje_dialogo_info_ERROR("Debes ingresar un costo", "ATENCION");
+    if ($("#precio_txt").val().trim().length === 0) {
+        mensaje_dialogo_info_ERROR("Debes ingresar un precio", "ATENCION");
         return;
     }
 
-    let costo = quitarDecimalesConvertir($("#costo_txt").val().trim());
+    let precio = quitarDecimalesConvertir($("#precio_txt").val().trim());
 
-    if (costo <= 0) {
-        mensaje_dialogo_info_ERROR("El costo debe ser mayor a cero", "ATENCION");
+    if (precio <= 0) {
+        mensaje_dialogo_info_ERROR("El precio debe ser mayor a cero", "ATENCION");
         return;
     }
 
@@ -82,8 +94,8 @@ function agregarTablaOrdenCompra() {
     $("#orden_compra_compra tr").each(function () {
 
 
-        if ($(this).find("td:eq(0)").text() === $("#insumo_lst").val()) {
-            mensaje_dialogo_info_ERROR("El insumo ya ha sido agregado anteriormente", "ATENCION");
+        if ($(this).find("td:eq(0)").text() === $("#producto_lst").val()) {
+            mensaje_dialogo_info_ERROR("El producto ya ha sido agregado anteriormente", "ATENCION");
             materialRepetido = true; // Marca como repetido
             return false; // Rompe el ciclo
         }
@@ -93,11 +105,11 @@ function agregarTablaOrdenCompra() {
     if (!materialRepetido) {
         $("#orden_compra_compra").append(`
         <tr>
-            <td>${$("#insumo_lst").val()}</td>
-            <td>${$("#insumo_lst option:selected").html().split(" | ")[0]}</td>
-            <td><input class="form-control costo-presu" value="${formatearNumero($("#costo_txt").val())}"></td>
+            <td>${$("#producto_lst").val()}</td>
+            <td>${$("#producto_lst option:selected").html().split(" | ")[0]}</td>
+            <td><input class="form-control costo-presu" value="${formatearNumero($("#precio_txt").val())}"></td>
             <td>${$("#cantidad_txt").val()}</td>
-            <td>${formatearNumero(cantidad * costo)}</td>
+            <td>${formatearNumero(cantidad * precio)}</td>
             <td>
                 <button class="btn btn-danger remover-item-orden_compra">Remover</button>
             </td>
@@ -172,7 +184,7 @@ function guardarOrdenCompra() {
     $("#orden_compra_compra tr").each(function (evt) {
         let detalle = {
             'cod_orden_compra': $("#cod").val(),
-            'cod_material': $(this).find("td:eq(0)").text(),
+            'cod_producto': $(this).find("td:eq(0)").text(),
             'costo': quitarDecimalesConvertir($(this).find("input").val()),
             'cantidad': $(this).find("td:eq(3)").text()
         };
@@ -219,6 +231,21 @@ function cargarTablaOrdenCompra() {
 function imprimirOrdenCompra(id) {
     window.open("paginas/movimientos/compra/orden_compra/print.php?id=" + id);
 }
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+$(document).on("change", "#producto_lst", function (evt) {
+    if ($("#producto_lst").val() === "0") {
+        $("#precio_txt").val("1");
+    } else {
+        let producto = ejecutarAjax("controladores/proyecto.php", "id=" + $("#producto_lst").val());
+        if (producto !== "0") {
+            let json_producto = JSON.parse(producto);
+            $("#precio_txt").val(formatearNumero(json_producto['precio']));
+        }
+    }
+});
+
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------

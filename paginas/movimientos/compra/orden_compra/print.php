@@ -21,13 +21,13 @@ join det_orden  dp
 on dp.cod_orden  = pc.cod_orden 
 where pc.cod_orden =  :id");
 
-$detalle = $base_datos->conectar()->prepare("select 
- m.descripcion  as nombre_imsumo,
+$detalle = $base_datos->conectar()->prepare("select
+ p.nombre  as nombre_producto,
  dpc.cantidad ,
  dpc.prec_uni as costo,
  dpc.cantidad  * dpc.prec_uni  as total
- from det_orden  dpc 
- join insumos m ON m.cod_insumos  = dpc.cod_insumos  
+ from det_orden  dpc
+ join producto p ON p.cod_producto  = dpc.cod_producto
  where dpc.cod_orden =:id");
 
 $query->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
@@ -126,7 +126,7 @@ $arreglo = $query->fetch(PDO::FETCH_OBJ);
                         <tr>
                             <th>Descripcion</th>
                             <th>Cantidad</th>
-                            <th>Costo</th>
+                            <th>Precio</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -138,7 +138,7 @@ $arreglo = $query->fetch(PDO::FETCH_OBJ);
                                 
                                 ?>
                                 <tr>
-                                    <td><?= $fila['nombre_imsumo'] ?></td>
+                                    <td><?= $fila['nombre_producto'] ?></td>
                                     <td><?= number_format($fila['cantidad'], 0, ',', '.') ?></td>
                                     <td><?= number_format($fila['costo'], 0, ',', '.') ?></td>
                                     <td><?= number_format($fila['total'], 0, ',', '.') ?></td>

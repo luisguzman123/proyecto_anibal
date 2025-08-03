@@ -38,16 +38,16 @@
         <hr> 
     </div>
     <div class="col-md-4">
-        <label>Insumo</label>
-        <select name="" id="insumo_lst" class="form-control"></select>
+        <label>Producto</label>
+        <select name="" id="producto_lst" class="form-control"></select>
     </div>
     <div class="col-md-3">
         <label>Cantidad</label>
         <input type="text" value="1" class="form-control formatear-numero" id="cantidad_txt">
     </div>
     <div class="col-md-3">
-        <label>Costo</label>
-        <input type="text" value="1" class="form-control formatear-numero" id="costo_txt">
+        <label>Precio</label>
+        <input type="text" value="1" class="form-control formatear-numero" id="precio_txt">
     </div>
     <div class="col-md-2">
         <label>Operaciones</label>
@@ -63,11 +63,11 @@
             <thead>
                 <tr>
                      <th>#</th>
-                     <th>Insumo</th>
-                     <th>Costo</th>
+                     <th>Producto</th>
+                     <th>Precio</th>
                      <th>Cantidad</th>
                      <th>Total</th>
-                    
+
                 </tr>
             </thead>
             <tbody id="orden_compra_compra"></tbody>

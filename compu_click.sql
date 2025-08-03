@@ -682,7 +682,7 @@ INSERT INTO `det_nota_remision` (`cod_remision`, `cod_insumos`, `cantidad`, `can
 
 CREATE TABLE `det_orden` (
   `cod_orden` int(11) NOT NULL,
-  `cod_insumos` int(11) NOT NULL,
+  `cod_producto` int(11) NOT NULL,
   `cantidad` int(11) NOT NULL,
   `prec_uni` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -691,7 +691,7 @@ CREATE TABLE `det_orden` (
 -- Volcado de datos para la tabla `det_orden`
 --
 
-INSERT INTO `det_orden` (`cod_orden`, `cod_insumos`, `cantidad`, `prec_uni`) VALUES
+INSERT INTO `det_orden` (`cod_orden`, `cod_producto`, `cantidad`, `prec_uni`) VALUES
 (1, 1, 7, 450000),
 (1, 2, 8, 120000),
 (2, 1, 1, 65000),
@@ -1882,8 +1882,8 @@ ALTER TABLE `det_nota_remision`
 -- Indices de la tabla `det_orden`
 --
 ALTER TABLE `det_orden`
-  ADD PRIMARY KEY (`cod_orden`,`cod_insumos`),
-  ADD KEY `insumos_det_orden_fk` (`cod_insumos`);
+  ADD PRIMARY KEY (`cod_orden`,`cod_producto`),
+  ADD KEY `producto_det_orden_fk` (`cod_producto`);
 
 --
 -- Indices de la tabla `det_pedido_compra`
@@ -2335,7 +2335,7 @@ ALTER TABLE `det_nota_compra`
 -- Filtros para la tabla `det_orden`
 --
 ALTER TABLE `det_orden`
-  ADD CONSTRAINT `insumos_det_orden_fk` FOREIGN KEY (`cod_insumos`) REFERENCES `insumos` (`cod_insumos`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `producto_det_orden_fk` FOREIGN KEY (`cod_producto`) REFERENCES `producto` (`cod_producto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `orden_compra_det_orden_fk` FOREIGN KEY (`cod_orden`) REFERENCES `orden_compra` (`cod_orden`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
