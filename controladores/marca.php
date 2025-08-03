@@ -6,14 +6,29 @@ if (isset($_POST['guardar'])) {
     guardar($_POST['guardar']);
 }
 
+if (isset($_POST['ultimo_registro'])) {
+    ultimo_registro();
+}
+
 function guardar($lista) {
     //crea un arreglo del texto que se le pasa
     $json_datos = json_decode($lista, true);
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("INSERT INTO `marcas`( `descripcion`, `estado`)
-     VALUES (:descripcion, :estado)");
+    $query = $base_datos->conectar()->prepare("INSERT INTO `marcas`(`cod_marca`, `descripcion`, `estado`)
+     VALUES (:cod_marca, :descripcion, :estado)");
 
     $query->execute($json_datos);
+}
+
+function ultimo_registro() {
+    $base_datos = new DB();
+    $query = $base_datos->conectar()->prepare("SELECT cod_marca FROM marcas ORDER BY cod_marca DESC LIMIT 1");
+    $query->execute();
+    if ($query->rowCount()) {
+        print_r(json_encode($query->fetch(PDO::FETCH_OBJ)));
+    } else {
+        echo '0';
+    }
 }
 
 //-----------------------------------------------------------------------------------------------------
@@ -112,3 +127,4 @@ function leer_marcas_activos() {
         echo '0';
     }
 }
+?>
