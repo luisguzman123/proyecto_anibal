@@ -400,8 +400,8 @@
                             </a>
                             <div class="collapse" id="ui-basic">
                                 <ul class="nav flex-column sub-menu">
-                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarInsumo();">Insumos</a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarEquipo();">Equipos</a></li>
+<!--                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarInsumo();">Insumos</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarEquipo();">Equipos</a></li>-->
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarCliente();">Cliente</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarProveedores();">Proveedor</a></li>
                                 </ul>
