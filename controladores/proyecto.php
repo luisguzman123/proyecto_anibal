@@ -8,7 +8,7 @@ if (isset($_POST['guardar'])) {
 function guardar($lista) {
     $json_datos = json_decode($lista, true);
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("INSERT INTO `proyectos`(`cod_proyecto`, `nombre`, `descripcion`, `precio`, `cod_marca`, `estado`) VALUES (:cod_proyecto,:nombre,:descripcion,:precio,:cod_marca,:estado)");
+    $query = $base_datos->conectar()->prepare("INSERT INTO `producto`(`cod_producto`, `nombre`, `descripcion`, `precio`, `cod_marca`, `estado`) VALUES (:cod_producto,:nombre,:descripcion,:precio,:cod_marca,:estado)");
     $query->execute($json_datos);
 }
 
@@ -18,7 +18,7 @@ if (isset($_POST['ultimo_registro'])) {
 
 function ultimo_registro() {
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("SELECT cod_proyecto FROM proyectos ORDER BY cod_proyecto DESC LIMIT 1");
+    $query = $base_datos->conectar()->prepare("SELECT cod_producto FROM producto ORDER BY cod_producto DESC LIMIT 1");
     $query->execute();
     if ($query->rowCount()) {
         print_r(json_encode($query->fetch(PDO::FETCH_OBJ)));
@@ -48,7 +48,7 @@ if (isset($_POST['leer'])) {
 
 function leer() {
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("SELECT p.cod_proyecto, p.nombre, p.descripcion, p.precio, m.descripcion AS marca, p.estado FROM proyectos p JOIN marcas m ON m.cod_marca = p.cod_marca");
+    $query = $base_datos->conectar()->prepare("SELECT p.cod_producto, p.nombre, p.descripcion, p.precio, m.descripcion AS marca, p.estado FROM producto p JOIN marcas m ON m.cod_marca = p.cod_marca");
     $query->execute();
     if ($query->rowCount()) {
         print_r(json_encode($query->fetchAll(PDO::FETCH_OBJ)));
@@ -63,7 +63,7 @@ if (isset($_POST['id'])) {
 
 function id($id) {
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("SELECT cod_proyecto, nombre, descripcion, precio, cod_marca, estado FROM proyectos WHERE cod_proyecto = $id");
+    $query = $base_datos->conectar()->prepare("SELECT cod_producto, nombre, descripcion, precio, cod_marca, estado FROM producto WHERE cod_producto = $id");
     $query->execute();
     if ($query->rowCount()) {
         print_r(json_encode($query->fetch(PDO::FETCH_OBJ)));
@@ -79,7 +79,7 @@ if (isset($_POST['actualizar'])) {
 function actualizar($lista) {
     $json_datos = json_decode($lista, true);
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("UPDATE proyectos SET nombre=:nombre, descripcion=:descripcion, precio=:precio, cod_marca=:cod_marca, estado=:estado WHERE cod_proyecto=:cod_proyecto");
+    $query = $base_datos->conectar()->prepare("UPDATE producto SET nombre=:nombre, descripcion=:descripcion, precio=:precio, cod_marca=:cod_marca, estado=:estado WHERE cod_producto=:cod_producto");
     $query->execute($json_datos);
 }
 
@@ -89,7 +89,7 @@ if (isset($_POST['eliminar'])) {
 
 function eliminar($id) {
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("DELETE FROM proyectos WHERE cod_proyecto = $id");
+    $query = $base_datos->conectar()->prepare("DELETE FROM producto WHERE cod_producto = $id");
     $query->execute();
 }
 
@@ -99,6 +99,6 @@ if (isset($_POST['desactivar'])) {
 
 function desactivar($id) {
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("UPDATE proyectos SET estado='DESACTIVADO' WHERE cod_proyecto = $id");
+    $query = $base_datos->conectar()->prepare("UPDATE producto SET estado='DESACTIVADO' WHERE cod_producto = $id");
     $query->execute();
 }

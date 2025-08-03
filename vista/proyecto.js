@@ -15,7 +15,7 @@ function mostrarAgregarProyecto() {
         $("#cod").val("1");
     } else {
         let json_ultimo = JSON.parse(ultimo);
-        $("#cod").val(quitarDecimalesConvertir(json_ultimo['cod_proyecto']) + 1);
+        $("#cod").val(quitarDecimalesConvertir(json_ultimo['cod_producto']) + 1);
     }
     cargarListaMarca("#marca_lst");
 }
@@ -41,7 +41,7 @@ function guardarProyecto() {
     }
 
     let data = {
-        'cod_proyecto': $("#cod").val(),
+        'cod_producto': $("#cod").val(),
         'nombre': $("#nombre_proyecto").val(),
         'descripcion': $("#descripcion_proyecto").val(),
         'precio': $("#precio_proyecto").val(),
@@ -54,7 +54,7 @@ function guardarProyecto() {
         mensaje_confirmacion("Guardado correctamente", "Guardado");
         mostrarListarProyecto();
     } else {
-        data['cod_proyecto'] = $("#id_proyecto").val();
+        data['cod_producto'] = $("#id_proyecto").val();
         let response = ejecutarAjax("controladores/proyecto.php", "actualizar=" + JSON.stringify(data));
         mensaje_confirmacion("Actualizado Correctamente", "Actualizado");
         mostrarListarProyecto();
@@ -72,10 +72,10 @@ function cargarTablaProyecto() {
         let json_data = JSON.parse(data);
         json_data.map(function (item) {
             fila += `<tr>`;
-            fila += `<td>${item.cod_proyecto}</td>`;
+            fila += `<td>${item.cod_producto}</td>`;
             fila += `<td>${item.nombre}</td>`;
             fila += `<td>${item.descripcion}</td>`;
-            fila += `<td>${item.precio}</td>`;
+            fila += `<td>${formatearNumero(item.precio)}</td>`;
             fila += `<td>${item.marca}</td>`;
             fila += `<td>${item.estado}</td>`;
             fila += `<td><button class='btn btn-warning editar-proyecto'><i class='fa fa-edit'></i> Editar</button>
@@ -107,8 +107,8 @@ $(document).on("click", ".editar-proyecto", function () {
                 $(".contenido-principal").html(contenido);
                 cargarListaMarca("#marca_lst");
                 let json_registro = JSON.parse(response);
-                $("#id_proyecto").val(json_registro['cod_proyecto']);
-                $("#cod").val(json_registro['cod_proyecto']);
+                $("#id_proyecto").val(json_registro['cod_producto']);
+                $("#cod").val(json_registro['cod_producto']);
                 $("#nombre_proyecto").val(json_registro['nombre']);
                 $("#descripcion_proyecto").val(json_registro['descripcion']);
                 $("#precio_proyecto").val(json_registro['precio']);

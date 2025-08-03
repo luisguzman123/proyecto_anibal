@@ -6,7 +6,7 @@
         <!-- Required meta tags -->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>CompuClic</title>
+        <title>Proyecto</title>
         <!-- base:css -->
         <link rel="stylesheet" href="vendors/typicons/typicons.css">
         <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
@@ -402,13 +402,13 @@
                                 <ul class="nav flex-column sub-menu">
 <!--                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarInsumo();">Insumos</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarEquipo();">Equipos</a></li>-->
+                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarCiudad();">Ciudad</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarCliente();">Cliente</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarProveedores();">Proveedor</a></li>
-                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarCiudad();">Ciudad</a></li>
-
-                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarProyecto();">Proyecto</a></li>
 
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarMarca();">Marca</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarProyecto();">Producto</a></li>
+
 
                                 </ul>
                             </div>
