@@ -12,8 +12,8 @@ function guardar($lista) {
     $json_datos = json_decode($lista, true);
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("INSERT INTO det_orden
-(cod_orden, cod_insumos, cantidad, prec_uni)
-VALUES(:cod_orden_compra, :cod_material, :cantidad, :costo);");
+(cod_orden, cod_producto, cantidad, prec_uni)
+VALUES(:cod_orden_compra, :cod_producto, :cantidad, :costo);");
 
     $query->execute($json_datos);
 }
@@ -103,17 +103,14 @@ VALUES(:cod_orden_compra, :cod_material, :cantidad, :costo);");
  function id($id){
      $base_datos = new DB();
      $query = $base_datos->conectar()->prepare("select 
-        m.cod_insumos as cod_material,
-        m.descripcion  as nombre_material,
+        p.cod_producto as cod_producto,
+        p.nombre  as nombre_producto,
         dpc.cantidad ,
         dpc.prec_uni as costo,
-        dpc.cantidad  * dpc.prec_uni  as total,
-        IF(m.cod_impuesto = 1, dpc.prec_uni * dpc.cantidad, 0) as iva10,
-        IF(m.cod_impuesto = 2, dpc.prec_uni * dpc.cantidad, 0) as iva5,
-         IF(m.cod_impuesto = 3, dpc.prec_uni * dpc.cantidad, 0) as exenta
-        from det_orden  dpc 
-        join insumos m ON m.cod_insumos  = dpc.cod_insumos 
-         WHERE dpc.cod_orden  = $id ");
+        dpc.cantidad  * dpc.prec_uni  as total
+        from det_orden  dpc
+        join producto p ON p.cod_producto  = dpc.cod_producto
+        WHERE dpc.cod_orden  = $id ");
     
      $query->execute();
 
