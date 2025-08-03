@@ -309,8 +309,8 @@ $(document).on("change", "#orden_compra_lst", function (evt) {
             json_data.map(function (item) {
                 $("#factura_compra").append(`
                     <tr>
-                        <td>${item.cod_material}</td>
-                        <td>${item.nombre_material}</td>
+                        <td>${item.cod_producto}</td>
+                        <td>${item.nombre_producto}</td>
                         <td>${formatearNumero(item.costo)}</td>
                         <td>${item.cantidad}</td>
                         <td>${formatearNumero(item.exenta)}</td>
