@@ -6,59 +6,37 @@ if (isset($_POST['guardar'])) {
     guardar($_POST['guardar']);
 }
 
-function guardar($lista) {
-    //crea un arreglo del texto que se le pasa
-    $json_datos = json_decode($lista, true);
-    $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("INSERT INTO `proveedor`
-    ( `nom_ape_prov`,
-     `razon_social_prov`, `telefono_prov`, 
-     `ruc_prov`, `direccion_prov`, `email_prov`, `estado`, 
-     `cod_ciudad`) VALUES (:nom_ape_prov, :telefono_prov, :ruc_prov, :direccion_prov, :email_prov , :estado, :cod_ciudad)");
-
-    $query->execute($json_datos);
+if (isset($_POST['ultimo_registro'])) {
+    ultimo_registro();
 }
 
-//-----------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------
-
-if(isset($_POST['leer'])){
+if (isset($_POST['leer'])) {
     leer();
 }
 
-function leer(){
-    $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("SELECT `cod_proveedor`,
-     `nom_ape_prov`, `razon_social_prov`,
-     `telefono_prov`, `ruc_prov`, `direccion_prov`,
-      `email_prov`, `estado`,
-      `cod_ciudad` 
-      FROM `proveedor`");
-    
-    $query->execute();
-
-    if ($query->rowCount()) {
-        print_r(json_encode($query->fetchAll(PDO::FETCH_OBJ)));
-    } else {
-        echo '0';
-    }
-}
-//-----------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------
-if(isset($_POST['id'])){
+if (isset($_POST['id'])) {
     id($_POST['id']);
 }
 
-function id($id){
-    $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("SELECT `id_insumo`, `descripcion`,
-     `costo_compra`, `precio_venta`, `stock`, `stock_minimo`, `marca`, `estado` 
-    FROM `insumo`  WHERE id_insumo  = $id ");
-    
-    $query->execute();
+if (isset($_POST['actualizar'])) {
+    actualizar($_POST['actualizar']);
+}
 
+if (isset($_POST['eliminar'])) {
+    eliminar($_POST['eliminar']);
+}
+
+function guardar($lista) {
+    $json_datos = json_decode($lista, true);
+    $base_datos = new DB();
+    $query = $base_datos->conectar()->prepare("INSERT INTO ciudad (cod_ciudad, nombre_ciud, estado_ciud) VALUES (:cod_ciudad, :nombre_ciud, :estado_ciud)");
+    $query->execute($json_datos);
+}
+
+function ultimo_registro() {
+    $base_datos = new DB();
+    $query = $base_datos->conectar()->prepare("SELECT cod_ciudad FROM ciudad ORDER BY cod_ciudad DESC LIMIT 1");
+    $query->execute();
     if ($query->rowCount()) {
         print_r(json_encode($query->fetch(PDO::FETCH_OBJ)));
     } else {
@@ -66,76 +44,38 @@ function id($id){
     }
 }
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-if(isset($_POST['actualizar'])){
-    actualizar($_POST['actualizar']);
-}
-
-function actualizar($lista){
-    $json_datos = json_decode($lista, true);
+function leer() {
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("UPDATE `insumo`
-     SET `descripcion`=:descripcion,`costo_compra`=:costo_compra,`precio_venta`=:precio_venta,
-     `stock`=:stock,`stock_minimo`=:stock_minimo,`marca`=:marca,`estado`=:estado
-     WHERE `id_insumo` = :id_insumo");
-
-    $query->execute($json_datos);
-}
-
-if(isset($_POST['eliminar'])){
-    eliminar($_POST['eliminar']);
-}
-
-function eliminar($id){
-   
-    $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("DELETE FROM `insumo` where id_insumo = $id");
-
+    $query = $base_datos->conectar()->prepare("SELECT cod_ciudad, nombre_ciud, estado_ciud FROM ciudad");
     $query->execute();
-}
-
-if (isset($_POST["leer_descripcion"])) {
-    
-    leer_descripcion($_POST["leer_descripcion"]);
-   }
-   function leer_descripcion ($descripcion){
-       $base = new DB();
-       $query = $base ->conectar()->prepare("SELECT id_insumo, descripcion, costo_compra, precio_venta, stock, stock_minimo, marca, estado
-FROM insumo
-WHERE CONCAT(id_insumo, descripcion, costo_compra, precio_venta, stock, stock_minimo, marca, estado) LIKE '%$descripcion%'
-ORDER BY id_insumo DESC
-LIMIT 50");
-       $query ->execute ();
-       
-      if ($query->rowCount()) {
-           print_r(json_encode($query->fetchAll(PDO::FETCH_OBJ)));
-       } else {
-           echo '0';
-       }
-   }
-
-   
-
-   if (isset($_POST['leer_ciudad_activos'])) {
-    leer_ciudad_activos();
-}
-
-function leer_ciudad_activos() {
-//    $json_datos = json_decode($lista, true);
-    $base_datos = new DB();
-
-    $query = $base_datos->conectar()->prepare(" SELECT `cod_ciudad`, 
-    `descripcion_ciud`, `estado` 
-    FROM `ciudad`
-");
-
-    $query->execute();
-
     if ($query->rowCount()) {
         print_r(json_encode($query->fetchAll(PDO::FETCH_OBJ)));
     } else {
         echo '0';
     }
 }
+
+function id($id) {
+    $base_datos = new DB();
+    $query = $base_datos->conectar()->prepare("SELECT cod_ciudad, nombre_ciud, estado_ciud FROM ciudad WHERE cod_ciudad = $id");
+    $query->execute();
+    if ($query->rowCount()) {
+        print_r(json_encode($query->fetch(PDO::FETCH_OBJ)));
+    } else {
+        echo '0';
+    }
+}
+
+function actualizar($lista) {
+    $json_datos = json_decode($lista, true);
+    $base_datos = new DB();
+    $query = $base_datos->conectar()->prepare("UPDATE ciudad SET nombre_ciud=:nombre_ciud, estado_ciud=:estado_ciud WHERE cod_ciudad=:cod_ciudad");
+    $query->execute($json_datos);
+}
+
+function eliminar($id) {
+    $base_datos = new DB();
+    $query = $base_datos->conectar()->prepare("DELETE FROM ciudad WHERE cod_ciudad = $id");
+    $query->execute();
+}
+?>

@@ -1,86 +1,48 @@
-function mostrarListar() {
-    let contenido = dameContenido("paginas/referenciales/proveedores/listar.php");
+function mostrarListarCiudad() {
+    let contenido = dameContenido("paginas/referenciales/ciudad/listar.php");
     $(".contenido-principal").html(contenido);
-    cargarTablaProveedores("#proveedores_tb");
-    console.log(contenido);
-    //hola que tal?
+    cargarTablaCiudad();
 }
 //----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-function mostrarAgregar() {
-    let contenido = dameContenido("paginas/referenciales/proveedores/agregar.php");
+function mostrarAgregarCiudad() {
+    let contenido = dameContenido("paginas/referenciales/ciudad/agregar.php");
     $(".contenido-principal").html(contenido);
-}
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-function cancelarInsumo() {
-    Swal.fire({
-        title: "Atencion",
-        text: "Desea cancelar la operacion?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "No",
-        confirmButtonText: "Si"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            let contenido = dameContenido("paginas/referenciales/proveedores/listar.php");
-            $(".contenido-principal").html(contenido);
-            cargarTablaProveedores();
-        }
-    });
-
-}
-
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-function guardarProveedores() {
-
-   
-    
-
-    let data = {
-        'descripcion': $("#descripcion").val(),
-        'costo_compra': $("#costo_compra").val(),
-        'precio_venta': $("#precio_venta").val(),
-        'stock': $("#stock").val(),
-        'stock_minimo': $("#stock_minimo").val(),
-        'marca': $("#marca").val(),
-        'estado': $("#estado").val()
-        
-    };
-
-    
-    if($("#id_insumo").val() === "0"){
-        
-        let response = ejecutarAjax("controladores/insumo.php", "guardar=" + JSON.stringify(data));
-//        console.log(response);
-         mensaje_confirmacion("Guardado correctamente", "Guardado");
-//        mostrarListarInsumo();
-    }else{
-        data = {...data , 'id_insumo' : $("#id_insumo").val()};
-         let response = ejecutarAjax("controladores/insumo.php",
-         "actualizar=" + JSON.stringify(data));
-//        console.log(response);
-        mensaje_confirmacion("Actualizado Correctamente","Actualizado");
+    let ultimo = ejecutarAjax("controladores/ciudad.php", "ultimo_registro=1");
+    if (ultimo === "0") {
+        $("#cod").val("1");
+    } else {
+        let json_ultimo = JSON.parse(ultimo);
+        $("#cod").val(parseInt(json_ultimo['cod_ciudad']) + 1);
     }
-        $("#id_insumo").val("0");
-        mostrarListarInsumo();
-
-
+}
+//---------------------------------------------------------------------------
+function guardarCiudad() {
+    if ($("#nombre_ciud").val().trim().length === 0) {
+        mensaje_dialogo_info_ERROR("Atención", "Debes ingresar la descripción de la ciudad");
+        return false;
+    }
+    let data = {
+        'cod_ciudad': $("#cod").val(),
+        'nombre_ciud': $("#nombre_ciud").val(),
+        'estado_ciud': $("#estado_ciud").val()
+    };
+    if ($("#id_ciudad").val() === "0") {
+        ejecutarAjax("controladores/ciudad.php", "guardar=" + JSON.stringify(data));
+        mensaje_confirmacion("Guardado correctamente", "Guardado");
+    } else {
+        data = {
+            'cod_ciudad': $("#id_ciudad").val(),
+            'nombre_ciud': $("#nombre_ciud").val(),
+            'estado_ciud': $("#estado_ciud").val()
+        };
+        ejecutarAjax("controladores/ciudad.php", "actualizar=" + JSON.stringify(data));
+        mensaje_confirmacion("Actualizado Correctamente", "Actualizado");
+    }
+    mostrarListarCiudad();
 }
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-function cargarTablaProveedores() {
-    let data = ejecutarAjax("controladores/proveedores.php", "leer=1");
-
-
+function cargarTablaCiudad() {
+    let data = ejecutarAjax("controladores/ciudad.php", "leer=1");
     let fila = "";
     if (data === "0") {
         fila = "NO HAY REGISTROS";
@@ -88,30 +50,20 @@ function cargarTablaProveedores() {
         let json_data = JSON.parse(data);
         json_data.map(function (item) {
             fila += `<tr>`;
-            fila += `<td>${item.cod_proveedor}</td>`;
-            fila += `<td>${item.nom_ape_prov}</td>`;
-            fila += `<td>${item.razon_social_prov}</td>`;
-            fila += `<td>${item.telefono_prov}</td>`;
-            fila += `<td>${item.ruc_prov}</td>`;
-            fila += `<td>${item.direccion_prov}</td>`;
-            fila += `<td>${item.email_prov}</td>`;
-            fila += `<td>${item.estado}</td>`;
             fila += `<td>${item.cod_ciudad}</td>`;
-            fila += `<td>
-                        <button class='btn btn-warning editar-proveedores'><i class='fa fa-edit'></i> Editar</button>
-                        <button class='btn btn-danger eliminar-proveedores'><i class='fa fa-trash'></i> Eliminar</button>
-                    </td>`;
+            fila += `<td>${item.nombre_ciud}</td>`;
+            fila += `<td>${item.estado_ciud}</td>`;
+            fila += `<td>`;
+            fila += `<button class='btn btn-warning editar-ciudad'><i class='fa fa-edit'></i> Editar</button>`;
+            fila += ` <button class='btn btn-danger eliminar-ciudad'><i class='fa fa-trash'></i> Eliminar</button>`;
+            fila += `</td>`;
             fila += `</tr>`;
         });
     }
-
-    $("#proveedores_tb").html(fila);
+    $("#ciudad_tb").html(fila);
 }
-
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-$(document).on("click", ".editar-", function (evt) {
+$(document).on("click", ".editar-ciudad", function (evt) {
     let id = $(this).closest("tr").find("td:eq(0)").text();
     Swal.fire({
         title: "Atencion",
@@ -124,36 +76,21 @@ $(document).on("click", ".editar-", function (evt) {
         confirmButtonText: "Si"
     }).then((result) => {
         if (result.isConfirmed) {
-            let response = ejecutarAjax("controladores/proveedores.php", "id=" + id);
-            console.log(response);
-            if (response === "0") {
-
-            } else {
-                let json_data = JSON.parse(response);
-                //abrir ventana
-                let contenido = dameContenido("paginas/referenciales/insumo/agregar.php");
+            let response = ejecutarAjax("controladores/ciudad.php", "id=" + id);
+            if (response !== "0") {
+                let contenido = dameContenido("paginas/referenciales/ciudad/agregar.php");
                 $(".contenido-principal").html(contenido);
-
-    
-                //cargar los datos
                 let json_registro = JSON.parse(response);
-                $("#cod_proveedor").val(id);
-                $("#nom_ape_prov").val(json_registro['nom_ape_prov']);
-                $("#razon_social_prov").val(json_registro['razon_social_prov']);
-                $("#telefono_prov").val(json_registro['telefono_prov']);
-                $("#ruc_prov").val(json_registro['ruc_prov']);
-                $("#direccion_prov").val(json_registro['direccion_prov']);
-                $("#email_prov").val(json_registro['email_prov']);
-                $("#estado").val(json_registro['estado']);
-                $("#cod_ciudad").val(json_registro['cod_ciudad']);
+                $("#id_ciudad").val(json_registro['cod_ciudad']);
+                $("#cod").val(json_registro['cod_ciudad']);
+                $("#nombre_ciud").val(json_registro['nombre_ciud']);
+                $("#estado_ciud").val(json_registro['estado_ciud']);
             }
         }
     });
 });
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-$(document).on("click", ".eliminar-", function (evt) {
+$(document).on("click", ".eliminar-ciudad", function (evt) {
     let id = $(this).closest("tr").find("td:eq(0)").text();
     Swal.fire({
         title: "Atencion",
@@ -166,65 +103,9 @@ $(document).on("click", ".eliminar-", function (evt) {
         confirmButtonText: "Si"
     }).then((result) => {
         if (result.isConfirmed) {
-            let response = ejecutarAjax("controladores/insumo.php",
-            "eliminar=" + id);
-
-            console.log(response);
+            ejecutarAjax("controladores/ciudad.php", "eliminar=" + id);
             mensaje_confirmacion("Eliminado Correctamente", "Eliminado");
-            mostrarListarProveedores();
+            cargarTablaCiudad();
         }
     });
 });
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-$(document).on("keyup", "#b_insumo", function (evt) {
-    let data = ejecutarAjax("controladores/insumo.php", "leer_descripcion="+$("#b_insumo").val());
-
-
-    let fila = "";
-    if (data === "0") {
-        fila = "NO HAY REGISTROS";
-    } else {
-        let json_data = JSON.parse(data);
-        json_data.map(function (item) {
-            fila += `<tr>`;
-            fila += `<td>${item.cod_proveedor}</td>`;
-            fila += `<td>${item.nom_ape_prov}</td>`;
-            fila += `<td>${item.razon_social_prov}</td>`;
-            fila += `<td>${item.telefono_prov}</td>`;
-            fila += `<td>${item.ruc_prov}</td>`;
-            fila += `<td>${item.direccion_prov}</td>`;
-            fila += `<td>${item.email_prov}</td>`;
-            fila += `<td>${item.estado}</td>`;
-            fila += `<td>${item.cod_ciudad}</td>`;
-            fila += `<td>
-                        <button class='btn btn-warning editar-proveedores'><i class='fa fa-edit'></i> Editar</button>
-                        <button class='btn btn-danger eliminar-proveedores'><i class='fa fa-trash'></i> Eliminar</button>
-                    </td>`;
-            fila += `</tr>`;
-        });
-    }
-
-    $("#proveedores_tb").html(fila);
-});
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
-function imprimirInsumo(){
-    window.open("paginas/referenciales/proveedores/print.php");
-}
-
-
-function cargarListaCiudad(componente) {
-    let datos = ejecutarAjax("controladores/ciudad.php", "leer_ciudad_activos=1");
-    console.log(datos);
-    let option = "<option value='0'>Selecciona una ciudad</option>";
-    if (datos !== "0") {
-        let json_datos = JSON.parse(datos);
-        json_datos.map(function (item) {
-            option += `<option value='${item.cod_ciudad}'>${item.descripcion_ciud}</option>`;
-        });
-    }
-    $(componente).html(option);
-}
