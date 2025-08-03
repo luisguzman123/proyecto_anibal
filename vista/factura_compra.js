@@ -10,7 +10,7 @@ function mostrarAgregarFacturaCompra() {
     let contenido = dameContenido("paginas/movimientos/compra/factura_compra/agregar.php");
     $(".contenido-principal").html(contenido);
    
-    cargarListaInsumo("#material_lst");
+    cargarListaProducto("#producto_lst");
     dameFechaActual("fecha");
     dameFechaActual("fecha_venc");
     cargarListaOrdenPendiente("#orden_compra_lst");
@@ -51,8 +51,8 @@ function cancelarFacturaCompra() {
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 function agregarTablaFacturaCompra() {
-    if ($("#material_lst").val() === "0") {
-        mensaje_dialogo_info_ERROR("Debes seleccionar un material", "ATENCION");
+    if ($("#producto_lst").val() === "0") {
+        mensaje_dialogo_info_ERROR("Debes seleccionar un producto", "ATENCION");
         return;
     }
 
@@ -79,28 +79,28 @@ function agregarTablaFacturaCompra() {
         return;
     }
 
-    let materialRepetido = false; // Variable para detectar si el material ya existe
+    let productoRepetido = false; // Variable para detectar si el producto ya existe
 
     $("#factura_compra tr").each(function (evt) {
 
 
-        if ($(this).find("td:eq(0)").text() === $("#material_lst").val()) {
-            mensaje_dialogo_info_ERROR("El material ya ha sido agregado anteriormente", "ATENCION");
-            materialRepetido = true; // Marca como repetido
+        if ($(this).find("td:eq(0)").text() === $("#producto_lst").val()) {
+            mensaje_dialogo_info_ERROR("El producto ya ha sido agregado anteriormente", "ATENCION");
+            productoRepetido = true; // Marca como repetido
             return false; // Rompe el ciclo
         }
     });
-    
-    let producto  = ejecutarAjax("controladores/insumo.php", "id="+$("#material_lst").val());
+
+    let producto  = ejecutarAjax("controladores/insumo.php", "id="+$("#producto_lst").val());
     
     let json_producto = JSON.parse(producto);
 
-// Si no se encontró material repetido, agrega una nueva fila
-    if (!materialRepetido) {
+// Si no se encontró producto repetido, agrega una nueva fila
+    if (!productoRepetido) {
         $("#factura_compra").append(`
         <tr>
-            <td>${$("#material_lst").val()}</td>
-            <td>${$("#material_lst option:selected").html()}</td>
+            <td>${$("#producto_lst").val()}</td>
+            <td>${$("#producto_lst option:selected").html()}</td>
             <td>${formatearNumero($("#costo_txt").val())}</td>
             <td>${$("#cantidad_txt").val()}</td>
             <td>${(json_producto['cod_impuesto'] === 3) ? formatearNumero(cantidad * costo) : 0} </td>
@@ -232,7 +232,7 @@ function guardarFacturaCompra() {
     $("#factura_compra tr").each(function (evt) {
         let detalle = {
             'cod_compra': $("#cod").val(),
-            'cod_material': $(this).find("td:eq(0)").text(),
+            'cod_producto': $(this).find("td:eq(0)").text(),
             'costo': quitarDecimalesConvertir($(this).find("td:eq(2)").text()),
             'cantidad': $(this).find("td:eq(3)").text()
         };

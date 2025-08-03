@@ -72,8 +72,8 @@
         <hr> 
     </div>
     <div class="col-md-4">
-        <label>Insumo</label>
-        <select name="" id="material_lst" class="form-control"></select>
+        <label>Producto</label>
+        <select name="" id="producto_lst" class="form-control"></select>
     </div>
     <div class="col-md-3">
         <label>Cantidad</label>
@@ -97,7 +97,7 @@
             <thead>
                 <tr>
                      <th>#</th>
-                     <th>Insumo</th>
+                    <th>Producto</th>
                      <th>Costo</th>
                      <th>Cantidad</th>
                      <th>Exento</th>

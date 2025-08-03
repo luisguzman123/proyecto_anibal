@@ -13,7 +13,7 @@ function guardar($lista) {
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("INSERT INTO deta_nota
 (cod_nota, cod_insumo, cantidad, costo)
-VALUES(:cod_nota_compra, :cod_material,  :cantidad, :costo);");
+VALUES(:cod_nota_compra, :cod_producto,  :cantidad, :costo);");
 
     $query->execute($json_datos);
     

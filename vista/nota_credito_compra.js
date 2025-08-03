@@ -221,7 +221,7 @@ function guardarNotaCreditoCompra() {
              
             let detalle = {
                 'cod_nota_compra': $("#cod").val(),
-                'cod_material': $(this).find("td:eq(0)").text(),
+                'cod_producto': $(this).find("td:eq(0)").text(),
                 'costo': quitarDecimalesConvertir($(this).find("td:eq(2)").text()),
                 'cantidad': $(this).find("input:eq(0)").val()
             };
@@ -301,8 +301,8 @@ $(document).on("change", "#facturas_compra_lst", function (evt) {
             json_data.map(function (item) {
                 $("#nota_compra").append(`
                     <tr>
-                        <td>${item.cod_material}</td>
-                        <td>${item.nombre_insumo}</td>
+                        <td>${item.cod_producto}</td>
+                        <td>${item.nombre_producto}</td>
                         <td>${formatearNumero(item.costo)}</td>
                         <td><input type='number' max="${item.cantidad}" class="cantidad-nota form-control" value='${item.cantidad}' min="1"></td>
                         <td>${formatearNumero(item.exenta)}</td>
