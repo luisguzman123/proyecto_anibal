@@ -405,6 +405,7 @@
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarCliente();">Cliente</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarProveedores();">Proveedor</a></li>
                                     <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarCiudad();">Ciudad</a></li>
+                                    <li class="nav-item"> <a class="nav-link" href="#" onclick="mostrarListarMarca();">Marca</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -679,6 +680,7 @@
         <script src="vista/equipo.js"></script>
         <script src="vista/cliente.js"></script>
         <script src="vista/ciudad.js"></script>
+        <script src="vista/marca.js"></script>
         <script src="vista/pedido.js"></script>
         <script src="vista/presupuesto.js"></script>
         <script src="vista/orden_compra.js"></script>

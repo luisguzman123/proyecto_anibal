@@ -1,186 +1,48 @@
-function mostrarListar() {
-    let contenido = dameContenido("paginas/referenciales/proveedores/listar.php");
+function mostrarListarMarca() {
+    let contenido = dameContenido("paginas/referenciales/marca/listar.php");
     $(".contenido-principal").html(contenido);
-    cargarTablaProveedores("#proveedores_tb");
-    console.log(contenido);
+    cargarTablaMarca();
 }
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-function mostrarAgregar() {
-    let contenido = dameContenido("paginas/referenciales/proveedores/agregar.php");
+
+function mostrarAgregarMarca() {
+    let contenido = dameContenido("paginas/referenciales/marca/agregar.php");
     $(".contenido-principal").html(contenido);
-}
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-function cancelarInsumo() {
-    Swal.fire({
-        title: "Atencion",
-        text: "Desea cancelar la operacion?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "No",
-        confirmButtonText: "Si"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            let contenido = dameContenido("paginas/referenciales/proveedores/listar.php");
-            $(".contenido-principal").html(contenido);
-            cargarTablaProveedores();
-        }
-    });
-
-}
-
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-function guardarProveedores() {
-
-   
-    
-
-    let data = {
-        'descripcion': $("#descripcion").val(),
-        'costo_compra': $("#costo_compra").val(),
-        'precio_venta': $("#precio_venta").val(),
-        'stock': $("#stock").val(),
-        'stock_minimo': $("#stock_minimo").val(),
-        'marca': $("#marca").val(),
-        'estado': $("#estado").val()
-        
-    };
-
-    
-    if($("#id_insumo").val() === "0"){
-        
-        let response = ejecutarAjax("controladores/insumo.php", "guardar=" + JSON.stringify(data));
-//        console.log(response);
-         mensaje_confirmacion("Guardado correctamente", "Guardado");
-//        mostrarListarInsumo();
-    }else{
-        data = {...data , 'id_insumo' : $("#id_insumo").val()};
-         let response = ejecutarAjax("controladores/insumo.php",
-         "actualizar=" + JSON.stringify(data));
-//        console.log(response);
-        mensaje_confirmacion("Actualizado Correctamente","Actualizado");
-    }
-        $("#id_insumo").val("0");
-        mostrarListarInsumo();
-
-
-}
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-function cargarTablaProveedores() {
-    let data = ejecutarAjax("controladores/proveedores.php", "leer=1");
-
-
-    let fila = "";
-    if (data === "0") {
-        fila = "NO HAY REGISTROS";
+    let ultimo = ejecutarAjax("controladores/marca.php", "ultimo_registro=1");
+    if (ultimo === "0") {
+        $("#cod").val("1");
     } else {
-        let json_data = JSON.parse(data);
-        json_data.map(function (item) {
-            fila += `<tr>`;
-            fila += `<td>${item.cod_proveedor}</td>`;
-            fila += `<td>${item.nom_ape_prov}</td>`;
-            fila += `<td>${item.razon_social_prov}</td>`;
-            fila += `<td>${item.telefono_prov}</td>`;
-            fila += `<td>${item.ruc_prov}</td>`;
-            fila += `<td>${item.direccion_prov}</td>`;
-            fila += `<td>${item.email_prov}</td>`;
-            fila += `<td>${item.estado}</td>`;
-            fila += `<td>${item.cod_ciudad}</td>`;
-            fila += `<td>
-                        <button class='btn btn-warning editar-proveedores'><i class='fa fa-edit'></i> Editar</button>
-                        <button class='btn btn-danger eliminar-proveedores'><i class='fa fa-trash'></i> Eliminar</button>
-                    </td>`;
-            fila += `</tr>`;
-        });
+        let json_ultimo = JSON.parse(ultimo);
+        $("#cod").val(parseInt(json_ultimo['cod_marca']) + 1);
     }
-
-    $("#proveedores_tb").html(fila);
 }
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-$(document).on("click", ".editar-", function (evt) {
-    let id = $(this).closest("tr").find("td:eq(0)").text();
-    Swal.fire({
-        title: "Atencion",
-        text: "Desea editar el registro?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "No",
-        confirmButtonText: "Si"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            let response = ejecutarAjax("controladores/proveedores.php", "id=" + id);
-            console.log(response);
-            if (response === "0") {
+function guardarMarca() {
+    if ($("#descripcion").val().trim().length === 0) {
+        mensaje_dialogo_info_ERROR("Atención", "Debes ingresar la descripción de la marca");
+        return false;
+    }
+    let data = {
+        'cod_marca': $("#cod").val(),
+        'descripcion': $("#descripcion").val(),
+        'estado': $("#estado").val()
+    };
+    if ($("#id_marca").val() === "0") {
+        ejecutarAjax("controladores/marca.php", "guardar=" + JSON.stringify(data));
+        mensaje_confirmacion("Guardado correctamente", "Guardado");
+    } else {
+        data = {
+            'cod_marca': $("#id_marca").val(),
+            'descripcion': $("#descripcion").val(),
+            'estado': $("#estado").val()
+        };
+        ejecutarAjax("controladores/marca.php", "actualizar=" + JSON.stringify(data));
+        mensaje_confirmacion("Actualizado Correctamente", "Actualizado");
+    }
+    mostrarListarMarca();
+}
 
-            } else {
-                let json_data = JSON.parse(response);
-                //abrir ventana
-                let contenido = dameContenido("paginas/referenciales/insumo/agregar.php");
-                $(".contenido-principal").html(contenido);
-
-    
-                //cargar los datos
-                let json_registro = JSON.parse(response);
-                $("#cod_proveedor").val(id);
-                $("#nom_ape_prov").val(json_registro['nom_ape_prov']);
-                $("#razon_social_prov").val(json_registro['razon_social_prov']);
-                $("#telefono_prov").val(json_registro['telefono_prov']);
-                $("#ruc_prov").val(json_registro['ruc_prov']);
-                $("#direccion_prov").val(json_registro['direccion_prov']);
-                $("#email_prov").val(json_registro['email_prov']);
-                $("#estado").val(json_registro['estado']);
-                $("#cod_ciudad").val(json_registro['cod_ciudad']);
-            }
-        }
-    });
-});
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-$(document).on("click", ".eliminar-", function (evt) {
-    let id = $(this).closest("tr").find("td:eq(0)").text();
-    Swal.fire({
-        title: "Atencion",
-        text: "Desea eliminar el registro?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        cancelButtonText: "No",
-        confirmButtonText: "Si"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            let response = ejecutarAjax("controladores/insumo.php",
-            "eliminar=" + id);
-
-            console.log(response);
-            mensaje_confirmacion("Eliminado Correctamente", "Eliminado");
-            mostrarListarProveedores();
-        }
-    });
-});
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-$(document).on("keyup", "#b_insumo", function (evt) {
-    let data = ejecutarAjax("controladores/insumo.php", "leer_descripcion="+$("#b_insumo").val());
-
-
+function cargarTablaMarca() {
+    let data = ejecutarAjax("controladores/marca.php", "leer=1");
     let fila = "";
     if (data === "0") {
         fila = "NO HAY REGISTROS";
@@ -191,33 +53,59 @@ $(document).on("keyup", "#b_insumo", function (evt) {
             fila += `<td>${item.cod_marca}</td>`;
             fila += `<td>${item.descripcion}</td>`;
             fila += `<td>${item.estado}</td>`;
-            fila += `<td>
-                        <button class='btn btn-warning editar-marca'><i class='fa fa-edit'></i> Editar</button>
-                        <button class='btn btn-danger eliminar-marca'><i class='fa fa-trash'></i> Eliminar</button>
-                    </td>`;
+            fila += `<td>`;
+            fila += `<button class='btn btn-warning editar-marca'><i class='fa fa-edit'></i> Editar</button>`;
+            fila += ` <button class='btn btn-danger eliminar-marca'><i class='fa fa-trash'></i> Eliminar</button>`;
+            fila += `</td>`;
             fila += `</tr>`;
         });
     }
+    $("#marca_tb").html(fila);
+}
 
-    $("#proveedores_tb").html(fila);
+$(document).on("click", ".editar-marca", function (evt) {
+    let id = $(this).closest("tr").find("td:eq(0)").text();
+    Swal.fire({
+        title: "Atencion",
+        text: "Desea editar el registro?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "No",
+        confirmButtonText: "Si",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let response = ejecutarAjax("controladores/marca.php", "id=" + id);
+            if (response !== "0") {
+                let contenido = dameContenido("paginas/referenciales/marca/agregar.php");
+                $(".contenido-principal").html(contenido);
+                let json_registro = JSON.parse(response);
+                $("#id_marca").val(json_registro['cod_marca']);
+                $("#cod").val(json_registro['cod_marca']);
+                $("#descripcion").val(json_registro['descripcion']);
+                $("#estado").val(json_registro['estado']);
+            }
+        }
+    });
 });
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------
-function imprimirInsumo(){
-    window.open("paginas/referenciales/proveedores/print.php");
-}
 
-
-function cargarListaMarca(componente) {
-    let datos = ejecutarAjax("controladores/marca.php", "leer_marcas_activos=1");
-    console.log(datos);
-    let option = "<option value='0'>Selecciona una marca</option>";
-    if (datos !== "0") {
-        let json_datos = JSON.parse(datos);
-        json_datos.map(function (item) {
-            option += `<option value='${item.cod_marca}'>${item.descripcion}</option>`;
-        });
-    }
-    $(componente).html(option);
-}
+$(document).on("click", ".eliminar-marca", function (evt) {
+    let id = $(this).closest("tr").find("td:eq(0)").text();
+    Swal.fire({
+        title: "Atencion",
+        text: "Desea eliminar el registro?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "No",
+        confirmButtonText: "Si",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            ejecutarAjax("controladores/marca.php", "eliminar=" + id);
+            mensaje_confirmacion("Eliminado Correctamente", "Eliminado");
+            cargarTablaMarca();
+        }
+    });
+});
