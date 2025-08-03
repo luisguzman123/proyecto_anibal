@@ -25,8 +25,8 @@
             </select>
         </div>
         <div class="col-md-6">
-            <label for="">Impuesto</label>
-            <select id="impuesto_insumo" class="form-control">
+            <label for="">Tipo IVA</label>
+            <select id="tipo_iva_insumo" class="form-control">
             </select>
         </div>
         <div class="col-md-6">

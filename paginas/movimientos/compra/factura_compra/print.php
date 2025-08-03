@@ -31,9 +31,9 @@ $detalle = $base_datos->conectar()->prepare(" select
  dpc.cantidad ,
  dpc.costo as costo,
  dpc.cantidad  * dpc.costo  as total,
- IF(m.cod_impuesto = 1, dpc.costo * dpc.cantidad, 0) as iva10,
- IF(m.cod_impuesto = 2, dpc.costo * dpc.cantidad, 0) as iva5,
-  IF(m.cod_impuesto = 3, dpc.costo  * dpc.cantidad, 0) as exenta
+ IF(m.tipo_iva = 10, dpc.costo * dpc.cantidad, 0) as iva10,
+ IF(m.tipo_iva = 5, dpc.costo * dpc.cantidad, 0) as iva5,
+ IF(m.tipo_iva = 0, dpc.costo  * dpc.cantidad, 0) as exenta
  from detalle_compra   dpc 
  join insumos m ON m.cod_insumos  = dpc.cod_insumos  
  where dpc.cod_compra =  :id");

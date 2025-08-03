@@ -33,9 +33,9 @@ function guardar($lista) {
     $json_datos = json_decode($lista, true);
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("INSERT INTO `insumos`(`cod_insumos`, "
-            . "`descripcion`, `cod_marca_insumos`, `cod_impuesto`, `cantidad`, "
+            . "`descripcion`, `cod_marca_insumos`, `tipo_iva`, `cantidad`, "
             . "`estado_insumos`, `costo`, `precio`) VALUES (:cod_insumos,"
-            . ":descripcion,:cod_marca_insumos,:cod_impuesto,:cantidad,:estado_insumos,"
+            . ":descripcion,:cod_marca_insumos,:tipo_iva,:cantidad,:estado_insumos,"
             . ":costo,:precio)");
 
     $query->execute($json_datos);
@@ -51,13 +51,11 @@ if(isset($_POST['leer'])){
 
 function leer(){
     $base_datos = new DB();
-    $query = $base_datos->conectar()->prepare("SELECT i.`cod_insumos`, 
-        i.`descripcion`, mi.descripcion_marca, im.descripcion as des_imp, 
+    $query = $base_datos->conectar()->prepare("SELECT i.`cod_insumos`,
+        i.`descripcion`, mi.descripcion_marca, i.`tipo_iva`,
         i.`cantidad`, i.`estado_insumos`, i.`costo`, i.`precio` FROM insumos i
 JOIN marca_insumos mi
-ON i.cod_marca_insumos = mi.cod_marca_insumos
-JOIN impuesto im
-ON im.cod_impuesto = i.cod_impuesto");
+ON i.cod_marca_insumos = mi.cod_marca_insumos");
     
     $query->execute();
 
@@ -77,7 +75,7 @@ if(isset($_POST['id'])){
 function id($id){
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("SELECT `cod_insumos`, "
-            . "`descripcion`, `cod_marca_insumos`, `cod_impuesto`, "
+            . "`descripcion`, `cod_marca_insumos`, `tipo_iva`, "
             . "`cantidad`, `estado_insumos`, `costo`, `precio` "
             . "FROM `insumos` WHERE `cod_insumos` = $id ");
     
@@ -102,7 +100,7 @@ function actualizar($lista){
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("UPDATE `insumos` SET "
             . "`descripcion`=:descripcion,`cod_marca_insumos`=:cod_marca_insumos,"
-            . "`cod_impuesto`=:cod_impuesto,`cantidad`=:cantidad,"
+            . "`tipo_iva`=:tipo_iva,`cantidad`=:cantidad,"
             . "`estado_insumos`=:estado_insumos,`costo`=:costo,"
             . "`precio`=:precio WHERE `cod_insumos`=:cod_insumos");
 
@@ -164,7 +162,7 @@ function leer_ciudad_activos() {
     $base_datos = new DB();
 
     $query = $base_datos->conectar()->prepare("SELECT `cod_insumos`, 
-        `descripcion`, `cod_marca_insumos`, `cod_impuesto`, `cantidad`, 
+        `descripcion`, `cod_marca_insumos`, `tipo_iva`, `cantidad`, 
         `estado_insumos`, `costo`, `precio` FROM `insumos` WHERE estado_insumos = 
         'ACTIVO'
 ");
@@ -211,17 +209,10 @@ function leer_activos_marca() {
 }
 
 function leer_activos_impuesto() {
-//    $json_datos = json_decode($lista, true);
-    $base_datos = new DB();
-
-    $query = $base_datos->conectar()->prepare("SELECT `cod_impuesto`, `descripcion` FROM `impuesto`
-");
-
-    $query->execute();
-
-    if ($query->rowCount()) {
-        print_r(json_encode($query->fetchAll(PDO::FETCH_OBJ)));
-    } else {
-        echo '0';
-    }
+    $lista = [
+        ['tipo_iva' => 0, 'descripcion' => 'EXENTO'],
+        ['tipo_iva' => 5, 'descripcion' => 'I.V.A. 5%'],
+        ['tipo_iva' => 10, 'descripcion' => 'I.V.A. 10%']
+    ];
+    print_r(json_encode($lista));
 }

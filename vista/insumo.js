@@ -37,7 +37,7 @@ function mostrarAgregarInsumo() {
     let contenido = dameContenido("paginas/referenciales/insumo/agregar.php");
     $(".contenido-principal").html(contenido);
     cargarListaMarca("#marca_insumo");
-    cargarListaImpuesto("#impuesto_insumo");
+    cargarListaTipoIva("#tipo_iva_insumo");
 
     //obtener ultimo id
     let ultimo = ejecutarAjax("controladores/insumo.php", "ultimo_registro=1");
@@ -66,16 +66,10 @@ function cargarListaMarca(componente) {
     $(componente).html(option);
 }
 
-function cargarListaImpuesto(componente) {
-    let datos = ejecutarAjax("controladores/insumo.php", "leer_activos_impuesto=1");
-    console.log(datos);
-    let option = "<option value='0'>Selecciona un impuesto</option>";
-    if (datos !== "0") {
-        let json_datos = JSON.parse(datos);
-        json_datos.map(function (item) {
-            option += `<option value='${item.cod_impuesto}'>${item.descripcion}</option>`;
-        });
-    }
+function cargarListaTipoIva(componente) {
+    let option = "<option value='0'>Exento</option>";
+    option += "<option value='5'>I.V.A. 5%</option>";
+    option += "<option value='10'>I.V.A. 10%</option>";
     $(componente).html(option);
 }
 
@@ -90,8 +84,8 @@ function guardarInsumo() {
         mensaje_dialogo_info_ERROR("Debes seleccionar una marca", "ATENCION");
         return;
     }
-    if ($("#impuesto_insumo").val() === "0") {
-        mensaje_dialogo_info_ERROR("Debes seleccionar un impuesto", "ATENCION");
+    if ($("#tipo_iva_insumo").val() === "0") {
+        mensaje_dialogo_info_ERROR("Debes seleccionar un tipo de IVA", "ATENCION");
         return;
     }
 
@@ -110,7 +104,7 @@ function guardarInsumo() {
             'cod_insumos': $("#cod").val(),
             'descripcion': $("#descripcion_lst").val(),
             'cod_marca_insumos': $("#marca_insumo").val(),
-            'cod_impuesto': $("#impuesto_insumo").val(),
+            'tipo_iva': $("#tipo_iva_insumo").val(),
             'cantidad': $("#cantidad_txt").val(),
             'estado_insumos': 'ACTIVO',
             'costo': quitarDecimalesConvertir($("#costo_txt").val()),
@@ -127,7 +121,7 @@ function guardarInsumo() {
             'cod_insumos': $("#id_insumo").val(),
             'descripcion': $("#descripcion_lst").val(),
             'cod_marca_insumos': $("#marca_insumo").val(),
-            'cod_impuesto': $("#impuesto_insumo").val(),
+            'tipo_iva': $("#tipo_iva_insumo").val(),
             'cantidad': $("#cantidad_txt").val(),
             'estado_insumos': 'ACTIVO',
             'costo': quitarDecimalesConvertir($("#costo_txt").val()),
@@ -159,7 +153,7 @@ function cargarTablaInsumo() {
             fila += `<td>${item.cod_insumos}</td>`;
             fila += `<td>${item.descripcion}</td>`;
             fila += `<td>${item.descripcion_marca}</td>`;
-            fila += `<td>${item.des_imp}</td>`;
+            fila += `<td>${descripcionTipoIva(item.tipo_iva)}</td>`;
             fila += `<td>${formatearNumero(item.precio)}</td>`;
             fila += `<td><span class="badge badge-${(item.estado_insumos === "ACTIVO") ? 'success' : (item.estado_insumos === "DESACTIVADO") ? 'danger' : 'success'}">${item.estado_insumos}</span></td>`;
             fila += `<td>
@@ -172,6 +166,16 @@ function cargarTablaInsumo() {
     }
 
     $("#insumo_compra").html(fila);
+}
+
+function descripcionTipoIva(valor) {
+    if (valor == 10 || valor === '10') {
+        return 'I.V.A. 10%';
+    }
+    if (valor == 5 || valor === '5') {
+        return 'I.V.A. 5%';
+    }
+    return 'EXENTO';
 }
 
 $(document).on("keyup", "#costo_txt, #precio_txt", function (evt) {
@@ -234,7 +238,7 @@ $(document).on("click", ".editar-insumo", function (evt) {
                 let contenido = dameContenido("paginas/referenciales/insumo/agregar.php");
                 $(".contenido-principal").html(contenido);
                 cargarListaMarca("#marca_insumo");
-                cargarListaImpuesto("#impuesto_insumo");
+                cargarListaTipoIva("#tipo_iva_insumo");
 
 
                 //cargar los datos
@@ -243,7 +247,7 @@ $(document).on("click", ".editar-insumo", function (evt) {
                 $("#id_insumo").val(json_registro['cod_insumos']);
                 $("#descripcion_lst").val(json_registro['descripcion']);
                 $("#marca_insumo").val(json_registro['cod_marca_insumos']);
-                $("#impuesto_insumo").val(json_registro['cod_impuesto']);
+                $("#tipo_iva_insumo").val(json_registro['tipo_iva']);
                 $("#cantidad_txt").val(json_registro['cantidad']);
                 $("#costo_txt").val(formatearNumero(json_registro['costo']));
                 $("#precio_txt").val(formatearNumero(json_registro['precio']));

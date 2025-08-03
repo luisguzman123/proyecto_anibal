@@ -308,7 +308,7 @@ $(document).on("change", "#facturas_compra_lst", function (evt) {
                         <td>${formatearNumero(item.exenta)}</td>
                         <td>${formatearNumero(item.iva5)}</td>
                         <td>${formatearNumero(item.iva10)}</td>
-                        <td hidden>${(item.cod_impuesto)}</td>
+                        <td hidden>${(item.tipo_iva)}</td>
                          <td><input type="checkbox" class="seleccion-nota"></td>
                     </tr>
                 `);
@@ -325,13 +325,13 @@ $(document).on("change", ".cantidad-nota", function (evt) {
     let costo = quitarDecimalesConvertir($(this).closest("tr").find("td:eq(2)").text());
     let impuesto = $(this).closest("tr").find("td:eq(7)").text();
 
-    if (impuesto === "3") {
+    if (impuesto === "0") {
         $(this).closest("tr").find("td:eq(4)").text(formatearNumero(costo * cantidad));
     }
-    if (impuesto === "2") {
+    if (impuesto === "5") {
         $(this).closest("tr").find("td:eq(5)").text(formatearNumero(costo * cantidad));
     }
-    if (impuesto === "1") {
+    if (impuesto === "10") {
         $(this).closest("tr").find("td:eq(6)").text(formatearNumero(costo * cantidad));
     }
     calcularTotalNotaCreditoCompra();
