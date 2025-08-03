@@ -10,7 +10,7 @@ Class DB {
     
     public function __construct() {
         $this->host = 'localhost';
-        $this->base_de_datos = 'compu_click';
+        $this->base_de_datos = 'proyecto_anibal';
         $this->usuario = 'root';
         $this->pass = '';
         $this->charset = 'utf8mb4';  
