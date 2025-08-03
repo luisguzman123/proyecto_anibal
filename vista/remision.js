@@ -192,7 +192,7 @@ function guardarRemision(){
     $("#ajuste_stock_compra tr").each(function(evt) {
         let detalle = {
             'cod_nota_remision' : $("#cod").val(),
-            'cod_material' : $(this).find("td:eq(0)").text(),
+            'cod_producto' : $(this).find("td:eq(0)").text(),
             'cantidad_factura' : $(this).find("td:eq(2)").text(),
             'cantidad' : $(this).find("input").val()
         };
@@ -269,7 +269,7 @@ $(document).on("click", ".anular-remision", function (evt) {
 //$("#material_lst").change(function () {
 //    let codMaterial = $(this).val();
 //    if (codMaterial) {
-//        let data = ejecutarAjax("controladores/remision.php", "cod_material=" + codMaterial);
+//        let data = ejecutarAjax("controladores/remision.php", "cod_producto=" + codMaterial);
 //        let materialInfo = JSON.parse(data);
 //        $("#tipo_material").val(materialInfo.tipo_material); // Cargar tipo de material
 //    }
@@ -321,8 +321,8 @@ $(document).on("change", "#factura_compra_remision_lst", function (evt) {
             json_data.map(function (item) {
                 $("#ajuste_stock_compra").append(`
                     <tr>
-                        <td>${item.cod_material}</td>
-                        <td>${item.nombre_insumo}</td>
+                        <td>${item.cod_producto}</td>
+                        <td>${item.nombre_producto}</td>
                         <td>${item.cantidad}</td>
                         <td><input type='number' value='${item.cantidad}' class='form-control'></td>
                     </tr>

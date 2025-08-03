@@ -13,7 +13,7 @@ function guardar($lista) {
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("INSERT INTO detalle_compra
         (cod_compra, cod_insumos, cantidad, costo)
-     VALUES (:cod_compra,:cod_material,:cantidad,:costo)");
+     VALUES (:cod_compra,:cod_producto,:cantidad,:costo)");
 
     $query->execute($json_datos);
 }
@@ -101,9 +101,9 @@ function guardar($lista) {
 
  function id($id){
      $base_datos = new DB();
-     $query = $base_datos->conectar()->prepare("select 
- m.cod_insumos  as cod_material,
- m.descripcion  as nombre_insumo,
+    $query = $base_datos->conectar()->prepare("select
+ m.cod_insumos  as cod_producto,
+ m.descripcion  as nombre_producto,
  dpc.cantidad ,
  dpc.costo as costo,
  dpc.cantidad  * dpc.costo  as total,

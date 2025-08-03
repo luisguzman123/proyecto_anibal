@@ -12,7 +12,7 @@ function guardar($lista) {
     $base_datos = new DB();
     $query = $base_datos->conectar()->prepare("INSERT INTO det_nota_remision
 (cod_remision, cod_insumos, cantidad, cantidad_factura)
-VALUES(:cod_nota_remision, :cod_material, :cantidad,  :cantidad_factura);");
+VALUES(:cod_nota_remision, :cod_producto, :cantidad,  :cantidad_factura);");
 
     $query->execute($json_datos);
     

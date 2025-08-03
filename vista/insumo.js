@@ -11,6 +11,23 @@ function cargarListaInsumo(componente) {
     $(componente).html(option);
 }
 
+// Alias de \"cargarListaInsumo\" que muestra la lista como Productos
+// Se reutiliza el mismo controlador y datos, pero se cambia el texto
+// mostrado al usuario para mantener compatibilidad con otras partes del
+// sistema que aún utilizan la denominación \"insumo\".
+function cargarListaProducto(componente) {
+    let datos = ejecutarAjax("controladores/insumo.php", "leer_activos=1");
+    console.log(datos);
+    let option = "<option value='0'>Selecciona un Producto</option>";
+    if (datos !== "0") {
+        let json_datos = JSON.parse(datos);
+        json_datos.map(function (item) {
+            option += `<option value='${item.cod_insumos}'>${item.descripcion}</option>`;
+        });
+    }
+    $(componente).html(option);
+}
+
 function mostrarListarInsumo() {
     let contenido = dameContenido("paginas/referenciales/insumo/listar.php");
     $(".contenido-principal").html(contenido);
