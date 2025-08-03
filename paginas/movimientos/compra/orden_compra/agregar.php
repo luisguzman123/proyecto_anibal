@@ -13,20 +13,20 @@
         <input type="text" id="cod" class="form-control" readonly>
     </div>
     
-    <div class="col-md-4">
+    <div class="col-md-5">
         <label for="">Usuario</label>
         <input type="text" id="usuario_lst" class="form-control" readonly value="<?= $_SESSION['usuario_alias']?>">
           
     </div>
-    <div class="col-md-3">
+    <div class="col-md-6">
         <label for="">Fecha</label>
         <input type="date" name="" id="fecha" class="form-control"></input>
     </div>
-    <div class="col-md-6">
+<!--    <div class="col-md-6">
         <label>Presupuesto</label>
         <select name="" id="presupuesto_compra_lst" class="form-control"></select>
-    </div>
-    <div class="col-md-5">
+    </div>-->
+    <div class="col-md-12">
         <label>Proveedor</label>
         <select name="" id="proveedor_compra_lst" class="form-control"></select>
     </div>

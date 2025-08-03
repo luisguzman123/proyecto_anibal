@@ -158,7 +158,7 @@ function guardarOrdenCompra() {
     let cabecera = {
         'cod_orden_compra': $("#cod").val(),
         'fecha_orden': $("#fecha").val(),
-        'cod_presupuesto_comp': $("#presupuesto_compra_lst").val(),
+        'cod_presupuesto_comp': 1,
         'cod_proveedor': $("#proveedor_compra_lst").val(),
         'estado': 'PENDIENTE'
     };

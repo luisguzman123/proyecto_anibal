@@ -421,14 +421,14 @@
                             </a>
                             <div class="collapse" id="form-elements">
                                 <ul class="nav flex-column sub-menu">
-                                    <li class="nav-item"><a class="nav-link" onclick="mostrarListarPedidoCompra(); return false;" href="#">Pedido</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarPresupuestoCompra(); return false;">Presupuesto</a></li>
+<!--                                    <li class="nav-item"><a class="nav-link" onclick="mostrarListarPedidoCompra(); return false;" href="#">Pedido</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarPresupuestoCompra(); return false;">Presupuesto</a></li>-->
                                     <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarOrdenCompra(); return false;">Orden Compra</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarFacturaCompra(); return false;">Factura Compra</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarNotaCreditoCompra(); return false;">Nota de Credito</a></li>
+<!--                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarNotaCreditoCompra(); return false;">Nota de Credito</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarRemision(); return false;">Remision</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarAjusteStock(); return false;">Ajuste Stock</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarInforme(); return false;">Informes</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarAjusteStock(); return false;">Ajuste Stock</a></li>-->
+                                    <!--<li class="nav-item"><a class="nav-link" href="#" onclick="mostrarListarInforme(); return false;">Informes</a></li>-->
                                 </ul>
                             </div>
                         </li>
