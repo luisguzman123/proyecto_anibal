@@ -92,7 +92,7 @@ function agregarTablaFacturaCompra() {
     });
 
     let producto  = ejecutarAjax("controladores/insumo.php", "id="+$("#producto_lst").val());
-    
+
     let json_producto = JSON.parse(producto);
 
 // Si no se encontró producto repetido, agrega una nueva fila
@@ -103,9 +103,9 @@ function agregarTablaFacturaCompra() {
             <td>${$("#producto_lst option:selected").html()}</td>
             <td>${formatearNumero($("#costo_txt").val())}</td>
             <td>${$("#cantidad_txt").val()}</td>
-            <td>${(json_producto['cod_impuesto'] === 3) ? formatearNumero(cantidad * costo) : 0} </td>
-            <td>${(json_producto['cod_impuesto'] === 2) ? formatearNumero(cantidad * costo) : 0} </td>
-            <td>${(json_producto['cod_impuesto'] === 1) ? formatearNumero(cantidad * costo) : 0} </td>
+            <td>${(json_producto['tipo_iva'] == 0) ? formatearNumero(cantidad * costo) : 0} </td>
+            <td>${(json_producto['tipo_iva'] == 5) ? formatearNumero(cantidad * costo) : 0} </td>
+            <td>${(json_producto['tipo_iva'] == 10) ? formatearNumero(cantidad * costo) : 0} </td>
             <td>
                 <button class="btn btn-danger remover-item-factura_compra">Remover</button>
             </td>

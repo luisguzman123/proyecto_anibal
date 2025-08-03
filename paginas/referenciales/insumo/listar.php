@@ -21,7 +21,7 @@
                    <th>#</th>
                     <th>Descripcion</th>
                     <th>Marca</th>
-                    <th>Impuesto</th>
+                    <th>Tipo IVA</th>
                     <th>Precio</th>  
                     <th>Estado</th>
                     <th>Operaciones</th>

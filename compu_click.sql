@@ -907,7 +907,7 @@ INSERT INTO `funcionario` (`cod_funcionario`, `nombre_funcionario`, `ci_funciona
 --
 
 CREATE TABLE `impuesto` (
-  `cod_impuesto` int(11) NOT NULL,
+  `tipo_iva` int(11) NOT NULL,
   `descripcion` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -930,7 +930,7 @@ CREATE TABLE `insumos` (
   `cod_insumos` int(11) NOT NULL,
   `descripcion` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `cod_marca_insumos` int(11) NOT NULL,
-  `cod_impuesto` int(11) NOT NULL,
+  `tipo_iva` int(11) NOT NULL,
   `cantidad` int(11) DEFAULT NULL,
   `estado_insumos` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `costo` int(11) DEFAULT NULL,
@@ -941,11 +941,11 @@ CREATE TABLE `insumos` (
 -- Volcado de datos para la tabla `insumos`
 --
 
-INSERT INTO `insumos` (`cod_insumos`, `descripcion`, `cod_marca_insumos`, `cod_impuesto`, `cantidad`, `estado_insumos`, `costo`, `precio`) VALUES
-(1, 'INSUMO 1', 1, 1, 100, 'ACTIVO', 33000, 150000),
-(2, 'INSUMO 2', 1, 2, 1, 'ACTIVO', 43000, 178000),
-(3, 'INSUMO 3', 1, 2, 0, 'ACTIVO', 13000, 138000),
-(4, 'INSUMO 7', 1, 1, 11, 'ACTIVO', 120000, 790000);
+INSERT INTO `insumos` (`cod_insumos`, `descripcion`, `cod_marca_insumos`, `tipo_iva`, `cantidad`, `estado_insumos`, `costo`, `precio`) VALUES
+(1, 'INSUMO 1', 1, 10, 100, 'ACTIVO', 33000, 150000),
+(2, 'INSUMO 2', 1, 5, 1, 'ACTIVO', 43000, 178000),
+(3, 'INSUMO 3', 1, 5, 0, 'ACTIVO', 13000, 138000),
+(4, 'INSUMO 7', 1, 10, 11, 'ACTIVO', 120000, 790000);
 
 -- --------------------------------------------------------
 
@@ -1978,8 +1978,7 @@ ALTER TABLE `impuesto`
 --
 ALTER TABLE `insumos`
   ADD PRIMARY KEY (`cod_insumos`),
-  ADD KEY `marca_insumos_insumos_fk` (`cod_marca_insumos`),
-  ADD KEY `impuesto_insumos_fk` (`cod_impuesto`);
+  ADD KEY `marca_insumos_insumos_fk` (`cod_marca_insumos`);
 
 --
 -- Indices de la tabla `libro_compras`
@@ -2396,7 +2395,6 @@ ALTER TABLE `funcionario`
 -- Filtros para la tabla `insumos`
 --
 ALTER TABLE `insumos`
-  ADD CONSTRAINT `impuesto_insumos_fk` FOREIGN KEY (`cod_impuesto`) REFERENCES `impuesto` (`cod_impuesto`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `marca_insumos_insumos_fk` FOREIGN KEY (`cod_marca_insumos`) REFERENCES `marca_insumos` (`cod_marca_insumos`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
